@@ -1,5 +1,6 @@
 const express = require("express")
 const cors = require("cors")
+const userRouter = require("../router/userRouter")
 
 const app = express()
 
@@ -17,6 +18,7 @@ app.get('/', (req, res) => {
 })
 
 //Routers
+app.use('/users', userRouter)
 
 
 // Bad url error handling with middleware
