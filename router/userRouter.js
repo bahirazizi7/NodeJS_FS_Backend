@@ -1,5 +1,6 @@
 const express = require("express")
 const router = express.Router()
+const User =require('../model/userModel')
 
 router.get('/', (req, res, next) => {
     res.status(200).json({
@@ -21,16 +22,21 @@ router.get('/:id', (req, res, next) => {
     })
 })
 
-router.post('/', (req, res, next) => {
-    const name = req.body.name
-    res.status(201).json({
-        message: "Successful -POST ",
-        metadata: {
-            name: name,
-            hostname: req.hostname,
-            method: req.method
-        }
+router.post('/', async(req, res, next) => {
+    const {firstName, lastName, address, city, state, zipCode, email, password } = req.body
+    const user= new User({
+        firstName,
+        lastName,
+        address,
+        city, 
+        state,
+        zipCode,
+        email,
+        password
     })
+    await user.save()
+    res.status(201).json({message:"Successfuly user created", userData: user})
+   
 })
 
 router.put("/:id", (req, res, next) => {
