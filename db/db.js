@@ -3,6 +3,7 @@ require("dotenv").config()
 const User = require('../model/userModel')
 
 const connect = async () => {
+    console.log("mongo is up and running ")
     await mongoose.connect(process.env.mongoURL)
 }
 
@@ -11,7 +12,7 @@ const disconnect = async () => {
 }
 
 const findUser = async (obj) => {
-    await User.findOne(obj)
+    return await User.findOne(obj)
 }
 
 const saveUser = async (newUser) => {
