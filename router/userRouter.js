@@ -4,47 +4,12 @@ const User = require("../model/userModel")
 const { findUser, saveUser } = require('../db/db')
 const bcrypt = require("bcrypt")
 const mongoose = require("mongoose")
+const errorTemplate = require("../templates/errorTemplate")
+const { loginUser, registerUser } = require("../services/userServices")
 
-router.post("/register", async (req, res, next) => {
-    findUser({ email: req.body.email })
-        .then(user => {
-            if (user) {
-                return res.status(409).json({ message: "User exist; try logging in" })
-            }
-            else {
-                // encrypt the password 
-                const user = new User()
-                // user._id = mongoose.Types.ObjectId()
-                const newUser = Object.assign(user, req.body)
-                bcrypt.hash(newUser.password, 10, (error, has) => {
-                    if (error) {
-                        res.status(502).json({ error: error.message })
-                    }
-                    else {
-                        newUser.password = has
-                        saveUser(newUser)
-                            .then(user => {
-                                console.log(user)
-                                res.status(201).json({ message: "Successfuly resgitered", user: user })
-                            })
-                            .catch(error => {
-                                res.status(501).json({ error:"fuck this"+ error.message })
-                            })
+router.post("/register", registerUser)
 
-                    }
-                })
-            }
-
-        })
-        .catch(error => {
-            error: { error.message }
-        })
-
-})
-
-router.post("/login", (req, res, next) => {
-
-})
+router.post("/login", loginUser)
 
 
 module.exports = router
